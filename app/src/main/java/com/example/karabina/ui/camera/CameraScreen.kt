@@ -1,4 +1,4 @@
-package com.example.karabina.ui.setting
+package com.example.karabina.ui.camera
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SettingScreen(){
+fun CameraScreen(){
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Setting Screen", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Camera Screen", style = MaterialTheme.typography.bodyMedium)
     }
 }
