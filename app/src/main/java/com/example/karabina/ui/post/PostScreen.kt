@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.karabina.ui.post.postlist.PostList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +24,7 @@ fun PostScreen(){
             topBar = { TopAppBar(title = { Text(text = "投稿一覧") }) },
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
+                PostList()
             }
         }
     }
