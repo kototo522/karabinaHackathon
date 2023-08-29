@@ -33,7 +33,7 @@ fun HomeScreen() {
         color = MaterialTheme.colorScheme.background,
     ) {
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "SNS") }) },
+            topBar = { TopAppBar(title = { Text(text = "マップ") }) },
             floatingActionButton = {
                 Box(contentAlignment = Alignment.TopCenter){
                     FloatingActionButton(onClick = {showDialog.value = true},

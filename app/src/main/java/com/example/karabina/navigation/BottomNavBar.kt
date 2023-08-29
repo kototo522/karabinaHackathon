@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -25,7 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.karabina.ui.camera.CameraScreen
 import com.example.karabina.ui.home.HomeScreen
-import com.example.karabina.ui.setting.SettingScreen
+import com.example.karabina.ui.setting.PostScreen
 
 sealed class BottomBarScreen(
     val route: String,
@@ -33,8 +32,8 @@ sealed class BottomBarScreen(
     val icon: ImageVector
 ) {
     object Home : BottomBarScreen(route = "home", title = "Home", icon = Icons.Default.Place)
+    object Post : BottomBarScreen(route = "post", title = "Post", icon = Icons.Default.LibraryBooks)
     object Camera : BottomBarScreen(route = "camera", title = "Camera", icon = Icons.Default.CameraAlt)
-    object Setting : BottomBarScreen(route = "setting", title = "Setting", icon = Icons.Default.Settings)
 }
 
 @Composable
@@ -42,8 +41,8 @@ fun BottomNavigationBar() {
     val navController = rememberNavController()
     val screenItems = listOf(
         BottomBarScreen.Home,
+        BottomBarScreen.Post,
         BottomBarScreen.Camera,
-        BottomBarScreen.Setting
     )
     val navStackBackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navStackBackEntry?.destination?.route
@@ -57,11 +56,11 @@ fun BottomNavigationBar() {
                 composable(route = BottomBarScreen.Home.route) {
                     HomeScreen()
                 }
+                composable(route = BottomBarScreen.Post.route) {
+                    PostScreen()
+                }
                 composable(route = BottomBarScreen.Camera.route) {
                     CameraScreen()
-                }
-                composable(route = BottomBarScreen.Setting.route) {
-                    SettingScreen()
                 }
             }
             NavigationBar(
