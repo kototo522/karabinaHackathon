@@ -14,16 +14,16 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun MapView() {
-    val singapore = LatLng(1.35, 103.87)
+    val airport = LatLng(33.838099, 131.032089)
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(singapore, 10f)
+        position = CameraPosition.fromLatLngZoom(airport, 10f)
     }
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
         Marker(
-            state = MarkerState(position = singapore),
+            state = MarkerState(position = airport),
             title = "Singapore",
             snippet = "Marker in Singapore"
         )
