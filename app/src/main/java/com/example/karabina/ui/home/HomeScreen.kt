@@ -51,7 +51,7 @@ fun HomeScreen() {
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 if(showDialog.value) AddDialog(setShowDialog = { showDialog.value = it })
-                MapView()
+//                MapView()
             }
 
         }

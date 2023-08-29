@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -48,7 +49,8 @@ fun AddDialog(setShowDialog: (Boolean) -> Unit) {
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             imageUri = uri
         }
-    var text by remember { mutableStateOf("") }
+    var locationText by remember { mutableStateOf("") }
+    var descriptionText by remember { mutableStateOf("") }
     Dialog(onDismissRequest = { setShowDialog(false) }) {
         Surface(
             shape = RoundedCornerShape(5.dp),
@@ -57,7 +59,7 @@ fun AddDialog(setShowDialog: (Boolean) -> Unit) {
             Box(
                 contentAlignment = Alignment.Center,
             ) {
-                Column(modifier = Modifier.padding(20.dp).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(modifier = Modifier.padding(20.dp).height(500.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -80,30 +82,40 @@ fun AddDialog(setShowDialog: (Boolean) -> Unit) {
                                 .clickable { setShowDialog(false) },
                         )
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
                     if(imageUri != null){
                         Image(
                             painter = rememberAsyncImagePainter(imageUri),
-                            contentDescription = "My Image",
+                            contentDescription = "投稿画像",
                             modifier = Modifier.height(240.dp).padding(10.dp),
                         )
+                        OutlinedTextField(
+                            value = locationText,
+                            onValueChange = { locationText = it },
+                            modifier = Modifier.padding(5.dp),
+                            placeholder = { Text(text = "場所を入力", fontSize = 12.sp) },
+                        )
                     }else{
-                        Button(onClick = { launcher.launch("image/*") }) {
+                        Button(onClick = { launcher.launch("image/*") }, modifier = Modifier.height(240.dp), shape = RoundedCornerShape(0.dp),) {
                             Text(text = "画像を追加する")
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
                     OutlinedTextField(
-                        value = text,
-                        onValueChange = { text = it },
-                        modifier = Modifier.padding(5.dp)
+                        value = descriptionText,
+                        onValueChange = { descriptionText = it },
+                        modifier = Modifier.padding(5.dp),
+                        placeholder = { Text(text = "コメント", fontSize = 12.sp) }
                     )
                     Button(
                         onClick = { setShowDialog(false) },
                         shape = RoundedCornerShape(30.dp),
                         modifier = Modifier
-                            .height(40.dp)
+                            .height(50.dp)
+                            .padding(top = 10.dp)
                             .fillMaxWidth(),
                         ) {
-                            Text(text = "投稿する",style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold))
+                            Text(text = "投稿する",style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold))
                     }
                 }
 
