@@ -1,8 +1,13 @@
 package com.example.karabina.ui.home.component
 
 import android.R
+import android.content.Intent
 import android.net.Uri
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,7 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -89,6 +94,7 @@ fun AddDialog(setShowDialog: (Boolean) -> Unit) {
                             contentDescription = "投稿画像",
                             modifier = Modifier.height(240.dp).padding(10.dp),
                         )
+                        AutocompleteCompose()
                         OutlinedTextField(
                             value = locationText,
                             onValueChange = { locationText = it },
@@ -122,4 +128,40 @@ fun AddDialog(setShowDialog: (Boolean) -> Unit) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AutocompleteCompose() {
+    var selectedPlace: String? by remember { mutableStateOf(null) }
+    val placeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == ComponentActivity.RESULT_OK) {
+            val intent = result.data
+            val place = Autocomplete.getPlaceFromIntent(intent!!)
+            selectedPlace = place.name
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Button(onClick = { openAutocompleteScreen(placeLauncher) }) {
+            Text(text = "場所を選択")
+        }
+
+        selectedPlace?.let {
+            Text(text = "選択した場所: $it")
+        }
+    }
+}
+
+private fun openAutocompleteScreen(placeLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+    val fields = listOf(Place.Field.ID, Place.Field.NAME)
+    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+        .build(this)
+    placeLauncher.launch(IntentSenderRequest.Builder(intent).build())
 }
