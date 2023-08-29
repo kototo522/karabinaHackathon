@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 
+// https://developers.google.com/maps/documentation/places/android-sdk/autocomplete?hl=ja#add_an_autocomplete_widget
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDialog(setShowDialog: (Boolean) -> Unit) {
