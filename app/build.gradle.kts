@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.maps.android:maps-compose:2.11.4")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")
     implementation ("androidx.compose.material:material-icons-extended:1.3.1")
     implementation("io.coil-kt:coil-compose:2.4.0")
