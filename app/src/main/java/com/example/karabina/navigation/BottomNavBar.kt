@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Settings
@@ -31,8 +32,8 @@ sealed class BottomBarScreen(
     val title: String,
     val icon: ImageVector
 ) {
-    object Home : BottomBarScreen(route = "home", title = "Home", icon = Icons.Default.Home)
-    object Camera : BottomBarScreen(route = "camera", title = "Camera", icon = Icons.Default.Place)
+    object Home : BottomBarScreen(route = "home", title = "Home", icon = Icons.Default.Place)
+    object Camera : BottomBarScreen(route = "camera", title = "Camera", icon = Icons.Default.CameraAlt)
     object Setting : BottomBarScreen(route = "setting", title = "Setting", icon = Icons.Default.Settings)
 }
 

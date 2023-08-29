@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddLocationAlt
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,8 +38,8 @@ fun HomeScreen() {
                 Row (horizontalArrangement = Arrangement.End){
                     IconButton(onClick = {showDialog.value = true}) {
                         Icon(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = "投稿する"
+                            imageVector = Icons.Default.AddLocationAlt,
+                            contentDescription = "投稿"
                         )
                     }
                 }
