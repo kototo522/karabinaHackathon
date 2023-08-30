@@ -31,6 +31,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -46,7 +47,6 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -135,6 +135,8 @@ fun CameraScreen() {
                         cameraPermissionState.launchPermissionRequest()
                     }
                     SensorDataDisplay(
+                        latitude = location.latitude,
+                        longitude = location.longitude,
                         xLiveData = xLiveData,
                         yLiveData = yLiveData,
                         zLiveData = zLiveData
@@ -146,6 +148,8 @@ fun CameraScreen() {
 
 @Composable
 fun SensorDataDisplay(
+    latitude: Double,
+    longitude: Double,
     xLiveData: LiveData<Int>,
     yLiveData: LiveData<Int>,
     zLiveData: LiveData<Int>
@@ -161,43 +165,71 @@ fun SensorDataDisplay(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Post(0.0, 0.0, xLiveData, yLiveData, zLiveData)
+        PostGet(latitude, longitude, xLiveData, yLiveData, zLiveData)
     }
 }
 
 
-fun Post(latitude: Double, longitude: Double, xLiveData: LiveData<Int>, yLiveData: LiveData<Int>, zLiveData: LiveData<Int>) {
-    val url = "https://api.himarupi.com/get-plane"
-
-    val jsonObject = JSONObject().apply {
-        put("latitude", latitude)
-        put("longitude", longitude)
-        put("rx", xLiveData)
-        put("ry", yLiveData)
-        put("rz", zLiveData)
-    }
-
-    val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
-
-    val request = Request.Builder()
-        .url(url)
-        .post(requestBody)
-        .build()
-
+fun PostGet(latitude: Double, longitude: Double, xLiveData: LiveData<Int>, yLiveData: LiveData<Int>, zLiveData: LiveData<Int>) {
+    val baseUrl = "https://api.himarupi.com"
+    val getEndpoint = "/get-plane"
+    val postEndpoint = "/get-plane"
     val client = OkHttpClient()
 
-    client.newCall(request).enqueue(object : Callback {
+    // POSTリクエストの実行
+    val postJsonObject = JSONObject().apply {
+        put("latitude", latitude)
+        put("longitude", longitude)
+        put("rx", xLiveData.value)
+        put("ry", yLiveData.value)
+        put("rz", zLiveData.value)
+    }
+    val postRequestBody = RequestBody.create("application/json".toMediaTypeOrNull(), postJsonObject.toString())
+    val postRequest = Request.Builder()
+        .url("$baseUrl$postEndpoint")
+        .post(postRequestBody)
+        .build()
+
+    client.newCall(postRequest).enqueue(object : Callback {
         override fun onResponse(call: Call, response: Response) {
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
-                // responseBodyを処理
+                // POSTのresponseBodyを処理
             } else {
-                println("Request was not successful. Code: ${response.code}")
+                println("POST Request was not successful. Code: ${response.code}")
             }
         }
 
         override fun onFailure(call: Call, e: IOException) {
-            println("Request failed: ${e.message}")
+            Log.v("test","POST Request failed: ${e.message}")
+        }
+    })
+
+    // GETリクエストの実行
+    val getParameters = mapOf(
+        "latitude" to latitude.toString(),
+        "longitude" to longitude.toString(),
+        "rx" to xLiveData.value.toString(),
+        "ry" to yLiveData.value.toString(),
+        "rz" to zLiveData.value.toString()
+    )
+    val getQuery = getParameters.entries.joinToString("&") { "${it.key}=${it.value}" }
+    val getRequest = Request.Builder()
+        .url("$baseUrl$getEndpoint?$getQuery")
+        .build()
+
+    client.newCall(getRequest).enqueue(object : Callback {
+        override fun onResponse(call: Call, response: Response) {
+            if (response.isSuccessful) {
+                val responseBody = response.body?.string()
+                // GETのresponseBodyを処理
+            } else {
+                println("GET Request was not successful. Code: ${response.code}")
+            }
+        }
+
+        override fun onFailure(call: Call, e: IOException) {
+            println("GET Request failed: ${e.message}")
         }
     })
 }
