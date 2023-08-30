@@ -25,11 +25,13 @@ import androidx.lifecycle.viewmodel.CreationExtras.Empty.map
 import com.example.karabina.ui.home.component.AddDialog
 import com.example.karabina.ui.home.component.map.MapView
 import com.example.karabina.ui.home.component.map.OnMapReady
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
+    lateinit var googleMap: GoogleMap
     val showDialog = remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -55,7 +57,7 @@ fun HomeScreen() {
             Column(modifier = Modifier.padding(innerPadding)) {
                 if(showDialog.value) AddDialog(setShowDialog = { showDialog.value = it })
                 MapView()
-                OnMapReady(map, LatLng(-27.47093, 153.0235), "https://www.andtrip.jp/images/b92f20d16e2c9ddc6376edb4ce5b5c99ee64bb94.jpg")
+                OnMapReady(googleMap, LatLng(-27.47093, 153.0235), "https://www.andtrip.jp/images/b92f20d16e2c9ddc6376edb4ce5b5c99ee64bb94.jpg")
             }
 
         }
