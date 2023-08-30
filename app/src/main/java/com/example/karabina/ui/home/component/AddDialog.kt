@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
+import com.example.karabina.ui.home.component.data.dummyPosts
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
