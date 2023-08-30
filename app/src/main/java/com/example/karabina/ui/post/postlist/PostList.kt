@@ -51,14 +51,14 @@ fun PostCardItem(post: PostCard) {
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            post.location?.let { location ->
+            post.place?.let { place ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = location.toString(),
+                        text = place.toString(),
                         fontWeight = FontWeight.Bold
                     )
                 }

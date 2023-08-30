@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.CreationExtras.Empty.map
 import com.example.karabina.ui.home.component.AddDialog
 import com.example.karabina.ui.home.component.map.MapView
 import com.example.karabina.ui.home.component.map.OnMapReady
@@ -57,7 +56,7 @@ fun HomeScreen() {
             Column(modifier = Modifier.padding(innerPadding)) {
                 if(showDialog.value) AddDialog(setShowDialog = { showDialog.value = it })
                 MapView()
-                OnMapReady(googleMap, LatLng(-27.47093, 153.0235), "https://www.andtrip.jp/images/b92f20d16e2c9ddc6376edb4ce5b5c99ee64bb94.jpg")
+                OnMapReady(googleMap, LatLng(130.8752, 33.8834), "https://www.andtrip.jp/images/b92f20d16e2c9ddc6376edb4ce5b5c99ee64bb94.jpg")
             }
 
         }
