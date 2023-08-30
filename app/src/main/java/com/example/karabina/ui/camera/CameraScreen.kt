@@ -44,6 +44,16 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.IOException
 
 data class Location(val latitude: Double, val longitude: Double)
 
@@ -124,11 +134,11 @@ fun CameraScreen() {
                     } else {
                         cameraPermissionState.launchPermissionRequest()
                     }
-//                    SensorDataDisplay(
-//                        xLiveData = xLiveData,
-//                        yLiveData = yLiveData,
-//                        zLiveData = zLiveData
-//                    )
+                    SensorDataDisplay(
+                        xLiveData = xLiveData,
+                        yLiveData = yLiveData,
+                        zLiveData = zLiveData
+                    )
                 }
             }
         }
@@ -151,8 +161,46 @@ fun SensorDataDisplay(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = " X= $xValue　Y= $yValue　Z= $zValue",
-        )
+        Post(0.0, 0.0, xLiveData, yLiveData, zLiveData)
     }
 }
+
+
+fun Post(latitude: Double, longitude: Double, xLiveData: LiveData<Int>, yLiveData: LiveData<Int>, zLiveData: LiveData<Int>) {
+    val url = "https://api.himarupi.com/get-plane"
+
+    val jsonObject = JSONObject().apply {
+        put("latitude", latitude)
+        put("longitude", longitude)
+        put("rx", xLiveData)
+        put("ry", yLiveData)
+        put("rz", zLiveData)
+    }
+
+    val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), jsonObject.toString())
+
+    val request = Request.Builder()
+        .url(url)
+        .post(requestBody)
+        .build()
+
+    val client = OkHttpClient()
+
+    client.newCall(request).enqueue(object : Callback {
+        override fun onResponse(call: Call, response: Response) {
+            if (response.isSuccessful) {
+                val responseBody = response.body?.string()
+                // responseBodyを処理
+            } else {
+                println("Request was not successful. Code: ${response.code}")
+            }
+        }
+
+        override fun onFailure(call: Call, e: IOException) {
+            println("Request failed: ${e.message}")
+        }
+    })
+}
+
+
+
