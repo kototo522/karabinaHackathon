@@ -22,12 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.karabina.ui.home.component.AddDialog
-import com.example.karabina.ui.home.component.map.MapView
+import com.example.karabina.ui.home.component.map.CreateMapView
+import com.google.android.gms.maps.GoogleMap
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val showDialog = remember { mutableStateOf(false) }
+    lateinit var googleMap: GoogleMap
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
@@ -51,7 +54,8 @@ fun HomeScreen() {
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 if(showDialog.value) AddDialog(setShowDialog = { showDialog.value = it })
-//                MapView()
+                CreateMapView()
+//                Text(googleMap.cameraPosition.bearing.toString())
             }
 
         }

@@ -11,7 +11,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapView() {
+fun CreateMapView() {
     val airport = LatLng(33.838099, 131.032089)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(airport, 10f)

@@ -18,7 +18,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = "AIzaSyDqmG4ogkpRoz6KM8AAjz67OR-fQZ68M7w"
     }
 
     buildTypes {
@@ -55,7 +55,7 @@ dependencies {
     implementation ("com.google.maps.android:maps-compose:2.11.4")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")
     implementation ("androidx.compose.material:material-icons-extended:1.3.1")
-    implementation ("androidx.compose.runtime:runtime-android:1.3.3")
+    implementation ("androidx.compose.runtime:runtime-android:1.5.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("androidx.core:core-ktx:1.9.0")

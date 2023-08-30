@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.hardware.Sensor
 import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -36,11 +38,24 @@ fun CameraScreen() {
     val zLiveData = MutableLiveData(0)
 
     val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    val sensorEventListener = rememberUpdatedState { event: SensorEvent ->
-        xLiveData.postValue(event.values[0].toInt())
-        yLiveData.postValue(event.values[1].toInt())
-        zLiveData.postValue(event.values[2].toInt())
+
+    val sensorEventListener = object: SensorEventListener {
+        override fun onSensorChanged(p0: SensorEvent?){
+            p0?.let{
+                Log.e("testx", it.values[0].toInt().toString())
+                Log.e("testy", it.values[1].toInt().toString())
+                Log.e("testz", it.values[2].toInt().toString())
+                xLiveData.value = it.values[0].toInt()
+                yLiveData.value = it.values[1].toInt()
+                zLiveData.value = it.values[2].toInt()
+            }
+        }
+
+        override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        }
+
     }
+
     DisposableEffect(sensorManager) {
         sensorManager.registerListener(
             sensorEventListener,
@@ -60,11 +75,11 @@ fun CameraScreen() {
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 SensorDataDisplay(xLiveData, yLiveData, zLiveData)
-                if (cameraPermissionState.hasPermission) {
-                    launcher.launch(null)
-                } else {
-                    cameraPermissionState.launchPermissionRequest()
-                }
+//                if (cameraPermissionState.hasPermission) {
+//                    launcher.launch(null)
+//                } else {
+//                    cameraPermissionState.launchPermissionRequest()
+//                }
             }
         }
     }
