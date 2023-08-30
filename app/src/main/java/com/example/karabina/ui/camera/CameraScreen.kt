@@ -2,14 +2,13 @@ package com.example.karabina.ui.camera
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import com.google.android.gms.location.LocationRequest
 import android.os.Build
+import android.graphics.Bitmap
+import android.location.LocationRequest
 import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -52,7 +51,8 @@ fun CameraScreen() {
     }
     var location by remember { mutableStateOf(Location(0.0, 0.0)) }
     val coroutineScope = rememberCoroutineScope()
-    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(LocalContext.current) }
+    val context = LocalContext.current
+    val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
     DisposableEffect(Unit) {
         val locationRequest = LocationRequest.create().apply {
@@ -69,7 +69,6 @@ fun CameraScreen() {
             }
         }
         if (locationPermissionState.hasPermission) {
-            val context = LocalContext.current
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION
