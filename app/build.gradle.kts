@@ -18,6 +18,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+<<<<<<< HEAD
+=======
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = "AIzaSyDqmG4ogkpRoz6KM8AAjz67OR-fQZ68M7w"
+>>>>>>> 3317806327a99b79cc2f1e3387ea509176f94d26
     }
 
     buildTypes {
@@ -50,6 +54,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.google.accompanist:accompanist-permissions:0.23.1")
     implementation ("com.google.maps.android:maps-compose:2.11.4")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")
