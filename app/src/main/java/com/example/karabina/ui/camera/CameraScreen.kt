@@ -49,22 +49,19 @@ fun CameraScreen() {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
         bitmapImage = bitmap
     }
-    var location by remember { mutableStateOf(Location(0.0, 0.0)) }
+    var location by remember { mutableStateOf(Location(33.8815604, 130.8764971)) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
     DisposableEffect(Unit) {
-        val locationRequest = LocationRequest.create().apply {
-            interval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 val newLocation = locationResult.lastLocation
                 coroutineScope.launch {
-                    location = Location(newLocation.latitude, newLocation.longitude)
+                    if (newLocation != null) {
+                        location = Location(newLocation.latitude, newLocation.longitude)
+                    }
                 }
             }
         }
@@ -78,11 +75,7 @@ fun CameraScreen() {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                fusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.myLooper()
-                )
+                fusedLocationClient.removeLocationUpdates(locationCallback)
             } else {
                 locationPermissionState.launchPermissionRequest()
             }
